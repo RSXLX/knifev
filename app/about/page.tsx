@@ -1,7 +1,5 @@
 import Link from "next/link";
-import { publicVideos } from "@/lib/store";
-
-export const dynamic = "force-dynamic";
+import { videos } from "@/lib/videos";
 
 export const metadata = {
   title: "关于 — knifeV",
@@ -9,7 +7,7 @@ export const metadata = {
 };
 
 export default function AboutPage() {
-  const sources = Array.from(new Map(publicVideos().map((video) => [video.source, video])).values());
+  const sources = Array.from(new Map(videos.map((video) => [video.source, video])).values());
   return (
     <div className="mx-auto max-w-[860px] px-4 pt-28 pb-16">
       <span className="eyebrow">独立演示</span>

@@ -13,6 +13,8 @@ npm run dev
 
 开发服务器在 [http://127.0.0.1:43123](http://127.0.0.1:43123)。
 
+推到 `main` 后，GitHub Actions 会把静态站点发布到 GitHub Pages：<https://rsxlx.github.io/knifev/>。Pages 上可以浏览和播放内置短片。后台、埋点和本地片库修改需要在自己的机器上跑 `npm run dev` 或 `npm start`。
+
 ```bash
 npm run build
 npm start

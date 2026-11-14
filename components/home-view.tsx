@@ -8,6 +8,7 @@ import { VideoCard } from "@/components/video-card";
 import { Button } from "@/components/ui/button";
 import { useLibrary } from "@/lib/library";
 import { useCatalog } from "@/components/catalog-provider";
+import { asset } from "@/lib/base-path";
 import { track } from "@/lib/track";
 import { featuredId, getVideo, moods, rails, videosByIds } from "@/lib/videos";
 
@@ -333,7 +334,7 @@ export function HomeView() {
           </Button>
         </div>
         <div className="panel overflow-hidden">
-          <video className="aspect-video w-full object-cover" src={getVideo("canyon", list)?.src} poster="/posters/canyon.jpg" muted loop playsInline autoPlay preload="metadata" />
+          <video className="aspect-video w-full object-cover" src={getVideo("canyon", list)?.src} poster={asset("/posters/canyon.jpg")} muted loop playsInline autoPlay preload="metadata" />
         </div>
       </section>
 

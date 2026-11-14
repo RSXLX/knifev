@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { VideoCard } from "@/components/video-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,18 +9,22 @@ import { useCatalog } from "@/components/catalog-provider";
 import { track } from "@/lib/track";
 import { categories, filterVideos } from "@/lib/videos";
 
-export function LibraryView({ initialQuery = "", initialCat = "全部", initialSort = "new" }: { initialQuery?: string; initialCat?: string; initialSort?: string }) {
+export function LibraryView() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const catalog = useCatalog();
-  const [query, setQuery] = useState(initialQuery);
-  const [cat, setCat] = useState(initialCat || "全部");
-  const [sort, setSort] = useState(initialSort === "title" ? "title" : "new");
+  const qParam = searchParams.get("q") ?? "";
+  const catParam = searchParams.get("cat") ?? "全部";
+  const sortParam = searchParams.get("sort") === "title" ? "title" : "new";
+  const [query, setQuery] = useState(qParam);
+  const [cat, setCat] = useState(catParam);
+  const [sort, setSort] = useState(sortParam);
 
   useEffect(() => {
-    setQuery(initialQuery);
-    setCat(initialCat || "全部");
-    setSort(initialSort === "title" ? "title" : "new");
-  }, [initialQuery, initialCat, initialSort]);
+    setQuery(qParam);
+    setCat(catParam);
+    setSort(sortParam);
+  }, [qParam, catParam, sortParam]);
 
   const results = useMemo(() => filterVideos({ q: query, cat, sort }, catalog.videos), [query, cat, sort, catalog.videos]);
 

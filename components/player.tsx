@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Maximize, Pause, Play, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { asset } from "@/lib/base-path";
 import { track } from "@/lib/track";
 import type { VideoItem } from "@/lib/videos";
 
@@ -100,7 +101,7 @@ export function Player({ video }: { video: VideoItem }) {
           ref={mediaRef}
           className="h-full w-full object-contain"
           src={video.src}
-          poster={`/posters/${video.id}.jpg`}
+          poster={asset(`/posters/${video.id}.jpg`)}
           playsInline
           preload="metadata"
           onClick={() => void toggle()}

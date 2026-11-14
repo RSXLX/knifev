@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Clapperboard, ListVideo, Search, Sparkles } from "lucide-react";
@@ -86,7 +87,8 @@ export function HomeView() {
       </section>
 
       {rails.map((rail) => {
-        const items = videosByIds(rail.ids).slice(0, 8);
+        const items = videosByIds(rail.ids);
+        const clipped = items.length > 8;
         return (
           <section key={rail.id} className="mx-auto mt-16 max-w-[1440px] px-4 lg:mt-20">
             <div className="mb-3">
@@ -98,13 +100,21 @@ export function HomeView() {
                 {rail.more} →
               </Link>
             </div>
-            <div className="card-grid">
-              {items.map((video) => (
-                <VideoCard key={`${rail.id}-${video.id}`} video={video} />
-              ))}
-            </div>
-            <div className="mt-8 flex justify-center">
-              <Link href={rail.href} className="explore-btn">{rail.cta}</Link>
+            <div className={clipped ? "rail-clip" : ""}>
+              <div className="card-grid">
+                {items.map((video) => (
+                  <VideoCard key={`${rail.id}-${video.id}`} video={video} />
+                ))}
+              </div>
+              {clipped ? (
+                <div className="rail-fade">
+                  <Link href={rail.href} className="explore-btn">{rail.cta}</Link>
+                </div>
+              ) : (
+                <div className="mt-8 flex justify-center">
+                  <Link href={rail.href} className="explore-btn">{rail.cta}</Link>
+                </div>
+              )}
             </div>
           </section>
         );
@@ -131,10 +141,9 @@ export function HomeView() {
         <div ref={moodRef} className="mood-row mt-6">
           {moods.map((mood) => (
             <Link key={mood.title} href={mood.href} className="w-[210px] shrink-0 snap-start">
-              <span
-                className="block aspect-[3/4] overflow-hidden rounded-[12px] border border-white/8"
-                style={{ background: `linear-gradient(160deg, ${mood.palette[0]}, ${mood.palette[1]})` }}
-              />
+              <span className="relative block aspect-[3/4] overflow-hidden rounded-[12px] border border-white/8 bg-[#141414]">
+                <Image src={`/posters/${mood.cover}.jpg`} alt="" fill sizes="210px" className="object-cover" />
+              </span>
               <span className="mt-2.5 flex items-baseline justify-between gap-3">
                 <span className="font-[family-name:var(--font-display)] text-[14.5px]">{mood.title}</span>
                 <span className="text-[13px] text-[#8d8d8d]">{mood.note}</span>
@@ -176,12 +185,21 @@ export function HomeView() {
         </div>
         <div className="panel min-h-[420px] overflow-hidden p-3 sm:p-4">
           {step === 0 ? (
-            <div className="flex h-full min-h-[390px] flex-col justify-between rounded-2xl bg-[#0c0c0c] p-5">
-              <div>
-                <p className="text-sm text-[#8d8d8d]">搜索</p>
-                <p className="mt-3 font-[family-name:var(--font-display)] text-3xl font-light">夜色、航拍、辛特尔</p>
+            <div className="flex h-full min-h-[390px] flex-col rounded-2xl bg-[#0c0c0c] p-5">
+              <p className="text-sm text-[#8d8d8d]">搜索</p>
+              <p className="mt-3 font-[family-name:var(--font-display)] text-3xl font-light">夜色、航拍、辛特尔</p>
+              <div className="mt-5 grid flex-1 grid-cols-3 gap-2">
+                {["harbor", "canyon", "sintel", "bunny", "falls", "candle"].map((id) => {
+                  const item = getVideo(id);
+                  return (
+                    <Link key={id} href={`/watch/${id}`} className="relative h-full min-h-24 overflow-hidden rounded-xl bg-[#141414]">
+                      <Image src={`/posters/${id}.jpg`} alt="" fill sizes="180px" className="object-cover" />
+                      <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-2 pt-6 pb-2 text-xs">{item?.title}</span>
+                    </Link>
+                  );
+                })}
               </div>
-              <Button type="button" className="cta-pill w-fit" onClick={() => setSearchOpen(true)}>
+              <Button type="button" className="cta-pill mt-4 w-fit" onClick={() => setSearchOpen(true)}>
                 打开搜索
                 <span className="spark"><Search className="size-3.5" /></span>
               </Button>
@@ -193,9 +211,12 @@ export function HomeView() {
                 <p className="text-sm text-[#8d8d8d]">片单</p>
                 <ul className="mt-4 space-y-3">
                   {videos.slice(0, 4).map((video) => (
-                    <li key={video.id} className="flex items-center justify-between gap-3 border-b border-white/6 pb-3">
-                      <span>{video.title}</span>
-                      <span className="text-sm text-[#8d8d8d]">{video.category}</span>
+                    <li key={video.id} className="flex items-center gap-3 border-b border-white/6 pb-3">
+                      <Image src={`/posters/${video.id}.jpg`} alt="" width={56} height={56} className="size-14 shrink-0 rounded-lg object-cover" />
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate">{video.title}</span>
+                        <span className="text-sm text-[#8d8d8d]">{video.category}</span>
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -225,9 +246,12 @@ export function HomeView() {
                 <p className="text-sm text-[#8d8d8d]">接着看</p>
                 <div className="mt-4 grid grid-cols-2 gap-3">
                   {videos.slice(2, 6).map((video) => (
-                    <Link key={video.id} href={`/watch/${video.id}`} className="rounded-xl border border-white/8 p-3 hover:bg-white/5">
-                      <span className="block text-sm text-[#8d8d8d]">{video.category}</span>
-                      <span className="mt-1 block">{video.title}</span>
+                    <Link key={video.id} href={`/watch/${video.id}`} className="overflow-hidden rounded-xl border border-white/8 hover:bg-white/5">
+                      <Image src={`/posters/${video.id}.jpg`} alt="" width={480} height={342} className="aspect-[960/684] h-auto w-full object-cover" />
+                      <span className="block px-3 py-2">
+                        <span className="block text-sm text-[#8d8d8d]">{video.category}</span>
+                        <span className="mt-1 block">{video.title}</span>
+                      </span>
                     </Link>
                   ))}
                 </div>
@@ -305,7 +329,7 @@ export function HomeView() {
           </Button>
         </div>
         <div className="panel overflow-hidden">
-          <video className="aspect-video w-full object-cover" src={videos[4].src} muted loop playsInline autoPlay preload="metadata" />
+          <video className="aspect-video w-full object-cover" src={videos[4].src} poster="/posters/canyon.jpg" muted loop playsInline autoPlay preload="metadata" />
         </div>
       </section>
 

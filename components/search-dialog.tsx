@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
@@ -95,12 +96,7 @@ export function SearchDialog() {
                   onMouseEnter={() => setActive(index)}
                   onClick={() => openResult(video.id)}
                 >
-                  <span
-                    className="size-12 shrink-0 rounded-lg"
-                    style={{
-                      background: `linear-gradient(145deg, ${video.palette[0]}, ${video.palette[2]})`,
-                    }}
-                  />
+                  <Image src={`/posters/${video.id}.jpg`} alt="" width={48} height={48} className="size-12 shrink-0 rounded-lg object-cover" />
                   <span className="min-w-0">
                     <span className="block truncate text-[15px]">{video.title}</span>
                     <span className="block text-[13px] text-[#8d8d8d]">

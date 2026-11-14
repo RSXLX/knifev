@@ -88,6 +88,7 @@ export function Player({ video }: { video: VideoItem }) {
           ref={mediaRef}
           className="h-full w-full object-contain"
           src={video.src}
+          poster={`/posters/${video.id}.jpg`}
           playsInline
           preload="metadata"
           onClick={() => void toggle()}

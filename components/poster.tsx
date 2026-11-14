@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import type { VideoItem } from "@/lib/videos";
 
@@ -43,7 +44,7 @@ export function Poster({
           background: `radial-gradient(90% 80% at 12% 8%, ${video.palette[0]}, transparent 55%), radial-gradient(80% 70% at 92% 100%, ${video.palette[1]}, transparent 52%), linear-gradient(165deg, ${video.palette[2]}, #070707)`,
         }}
       />
-      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/35 to-transparent" />
+      <Image src={`/posters/${video.id}.jpg`} alt="" fill sizes="(min-width: 1024px) 25vw, 46vw" className="object-cover" />
       {armed ? (
         <video
           ref={ref}

@@ -243,12 +243,12 @@
 
 .rail-clip {
   position: relative;
-  max-height: 470px;
+  max-height: 408px;
   overflow: hidden;
 }
 @media (min-width: 1024px) {
   .rail-clip {
-    max-height: 648px;
+    max-height: 688px;
   }
 }
 .rail-fade {
@@ -256,12 +256,19 @@
   position: absolute;
   inset-inline: 0;
   bottom: 0;
-  height: 168px;
+  z-index: 40;
+  height: 118px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding-bottom: 6px;
-  background: linear-gradient(to bottom, rgba(6, 6, 6, 0), #060606 68%);
+  padding-bottom: 10px;
+  background: linear-gradient(to bottom, rgba(6, 6, 6, 0) 0%, rgba(6, 6, 6, 0.82) 46%, #060606 68%);
+}
+@media (min-width: 1024px) {
+  .rail-fade {
+    height: 148px;
+    padding-bottom: 18px;
+  }
 }
 .rail-fade > * {
   pointer-events: auto;

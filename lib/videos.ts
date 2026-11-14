@@ -331,7 +331,7 @@ export const rails: Rail[] = [
     more: "全部夜色",
     href: "/library?cat=夜色",
     cta: "探索夜色",
-    ids: ["harbor", "mojave", "clouds", "moon", "snow", "candle", "lightning", "station"],
+    ids: ["harbor", "mojave", "clouds", "moon", "snow", "candle", "lightning", "station", "rain", "flower", "sintel", "pass"],
   },
   {
     id: "roads",
@@ -340,7 +340,7 @@ export const rails: Rail[] = [
     more: "全部驾驶",
     href: "/library?cat=驾驶",
     cta: "探索路途",
-    ids: ["pass", "clouds", "station", "snow", "rain", "shore", "blackfoot", "bunny"],
+    ids: ["pass", "clouds", "station", "snow", "rain", "shore", "blackfoot", "bunny", "canyon", "meadow", "harbor", "falls"],
   },
   {
     id: "light",
@@ -349,7 +349,7 @@ export const rails: Rail[] = [
     more: "全部实验",
     href: "/library?cat=实验",
     cta: "探索实验",
-    ids: ["candle", "lightning", "flower", "window", "moon", "mojave", "harbor", "sintel"],
+    ids: ["candle", "lightning", "flower", "window", "moon", "mojave", "harbor", "sintel", "brook", "falls", "meadow", "clouds"],
   },
 ];
 
@@ -375,10 +375,10 @@ export function filterVideos(options: { q?: string; cat?: string; sort?: string 
 }
 
 export const moods = [
-  { title: "静下来看", note: "夜色", href: "/library?cat=夜色", palette: ["#f0a06a", "#1a1020"] },
-  { title: "从天上看", note: "航拍", href: "/library?q=航拍", palette: ["#e39a62", "#1a120e"] },
-  { title: "跟着路走", note: "公路", href: "/library?cat=驾驶", palette: ["#8ea888", "#141810"] },
-  { title: "只看动画", note: "动画", href: "/library?cat=动画", palette: ["#b7d36a", "#142014"] },
-  { title: "水与岸", note: "海岸", href: "/library?q=海岸", palette: ["#9eb4c4", "#101418"] },
-  { title: "一小簇光", note: "烛火", href: "/library?q=烛火", palette: ["#8eb7ff", "#101018"] },
+  { title: "静下来看", note: "夜色", href: "/library?cat=夜色", cover: "harbor" },
+  { title: "从天上看", note: "航拍", href: "/library?q=航拍", cover: "canyon" },
+  { title: "跟着路走", note: "公路", href: "/library?cat=驾驶", cover: "pass" },
+  { title: "只看动画", note: "动画", href: "/library?cat=动画", cover: "bunny" },
+  { title: "水与岸", note: "海岸", href: "/library?q=海岸", cover: "shore" },
+  { title: "一小簇光", note: "烛火", href: "/library?q=烛火", cover: "candle" },
 ];

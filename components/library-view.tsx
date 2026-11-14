@@ -5,10 +5,13 @@ import { useRouter } from "next/navigation";
 import { VideoCard } from "@/components/video-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useCatalog } from "@/components/catalog-provider";
+import { track } from "@/lib/track";
 import { categories, filterVideos } from "@/lib/videos";
 
 export function LibraryView({ initialQuery = "", initialCat = "全部", initialSort = "new" }: { initialQuery?: string; initialCat?: string; initialSort?: string }) {
   const router = useRouter();
+  const catalog = useCatalog();
   const [query, setQuery] = useState(initialQuery);
   const [cat, setCat] = useState(initialCat || "全部");
   const [sort, setSort] = useState(initialSort === "title" ? "title" : "new");
@@ -19,12 +22,14 @@ export function LibraryView({ initialQuery = "", initialCat = "全部", initialS
     setSort(initialSort === "title" ? "title" : "new");
   }, [initialQuery, initialCat, initialSort]);
 
-  const results = useMemo(() => filterVideos({ q: query, cat, sort }), [query, cat, sort]);
+  const results = useMemo(() => filterVideos({ q: query, cat, sort }, catalog.videos), [query, cat, sort, catalog.videos]);
 
   const apply = (next: { q?: string; cat?: string; sort?: string }) => {
     const q = next.q ?? query;
     const category = next.cat ?? cat;
     const sorting = next.sort ?? sort;
+    const matched = filterVideos({ q, cat: category, sort: sorting }, catalog.videos);
+    track("filter", { q, cat: category, sort: sorting, results: matched.length });
     const params = new URLSearchParams();
     if (q.trim()) params.set("q", q.trim());
     if (category && category !== "全部") params.set("cat", category);

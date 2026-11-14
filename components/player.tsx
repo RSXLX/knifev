@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Maximize, Pause, Play, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { track } from "@/lib/track";
 import type { VideoItem } from "@/lib/videos";
 
 function formatTime(value: number) {
@@ -35,11 +36,21 @@ export function Player({ video }: { video: VideoItem }) {
     };
     sync();
     const onError = () => setError("这条片子没有加载出来。网络可能拦了片源，可以重试或换一条。");
+    const onPlay = () => {
+      sync();
+      track("play", { videoId: video.id, title: video.title });
+    };
+    const onPause = () => {
+      sync();
+      if (!node.ended) track("pause", { videoId: video.id, time: Math.round(node.currentTime) });
+    };
+    const onEnded = () => track("ended", { videoId: video.id, title: video.title });
     node.addEventListener("timeupdate", sync);
     node.addEventListener("loadedmetadata", sync);
     node.addEventListener("durationchange", sync);
-    node.addEventListener("play", sync);
-    node.addEventListener("pause", sync);
+    node.addEventListener("play", onPlay);
+    node.addEventListener("pause", onPause);
+    node.addEventListener("ended", onEnded);
     node.addEventListener("waiting", sync);
     node.addEventListener("canplay", sync);
     node.addEventListener("error", onError);
@@ -47,13 +58,14 @@ export function Player({ video }: { video: VideoItem }) {
       node.removeEventListener("timeupdate", sync);
       node.removeEventListener("loadedmetadata", sync);
       node.removeEventListener("durationchange", sync);
-      node.removeEventListener("play", sync);
-      node.removeEventListener("pause", sync);
+      node.removeEventListener("play", onPlay);
+      node.removeEventListener("pause", onPause);
+      node.removeEventListener("ended", onEnded);
       node.removeEventListener("waiting", sync);
       node.removeEventListener("canplay", sync);
       node.removeEventListener("error", onError);
     };
-  }, [video.id, attempt]);
+  }, [video.id, video.title, attempt]);
 
   const toggle = async () => {
     const node = mediaRef.current;
@@ -140,6 +152,12 @@ export function Player({ video }: { video: VideoItem }) {
             const node = mediaRef.current;
             if (!node || !duration) return;
             node.currentTime = (Number(event.target.value) / 1000) * duration;
+          }}
+          onPointerUp={(event) => {
+            const node = mediaRef.current;
+            if (!node || !duration) return;
+            const to = (Number((event.target as HTMLInputElement).value) / 1000) * duration;
+            track("seek", { videoId: video.id, to: Math.round(to) });
           }}
         />
         <div className="flex flex-wrap items-center gap-2">

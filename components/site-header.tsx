@@ -7,6 +7,7 @@ import { Menu, Search, UserRound, X } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { useLibrary } from "@/lib/library";
+import { track } from "@/lib/track";
 import { categories } from "@/lib/videos";
 
 const mainLinks = [
@@ -57,7 +58,7 @@ export function SiteHeader() {
             <Search className="size-4" />
             <span className="truncate text-[15px]">搜索片库</span>
           </button>
-          <Button type="button" variant="ghost" size="icon" className="glass size-11 rounded-full text-[#f5f5f5]" aria-label={menu ? "关闭菜单" : "打开菜单"} aria-expanded={menu} onClick={() => setMenu((value) => !value)}>
+          <Button type="button" variant="ghost" size="icon" className="glass size-11 rounded-full text-[#f5f5f5]" aria-label={menu ? "关闭菜单" : "打开菜单"} aria-expanded={menu} onClick={() => setMenu((value) => { if (!value) track("menu_open"); return !value; })}>
             {menu ? <X /> : <Menu />}
           </Button>
         </div>

@@ -283,15 +283,15 @@ export const videos: VideoItem[] = [
 
 export const featuredId = "sintel";
 
-export function getVideo(id: string) {
-  return videos.find((video) => video.id === id);
+export function getVideo(id: string, list: VideoItem[] = videos) {
+  return list.find((video) => video.id === id);
 }
 
-export function relatedVideos(id: string, count = 4) {
-  const current = getVideo(id);
-  if (!current) return videos.slice(0, count);
-  const same = videos.filter((video) => video.id !== id && video.category === current.category);
-  const rest = videos.filter((video) => video.id !== id && video.category !== current.category);
+export function relatedVideos(id: string, count = 4, list: VideoItem[] = videos) {
+  const current = getVideo(id, list);
+  if (!current) return list.slice(0, count);
+  const same = list.filter((video) => video.id !== id && video.category === current.category);
+  const rest = list.filter((video) => video.id !== id && video.category !== current.category);
   return [...same, ...rest].slice(0, count);
 }
 
@@ -353,14 +353,14 @@ export const rails: Rail[] = [
   },
 ];
 
-export function videosByIds(ids: string[]) {
-  return ids.map((id) => getVideo(id)).filter((video): video is VideoItem => Boolean(video));
+export function videosByIds(ids: string[], list: VideoItem[] = videos) {
+  return ids.map((id) => getVideo(id, list)).filter((video): video is VideoItem => Boolean(video));
 }
 
-export function filterVideos(options: { q?: string; cat?: string; sort?: string }) {
+export function filterVideos(options: { q?: string; cat?: string; sort?: string }, source: VideoItem[] = videos) {
   const q = options.q?.trim().toLowerCase() ?? "";
   const cat = options.cat && options.cat !== "全部" ? options.cat : "";
-  let list = videos.filter((video) => {
+  let list = source.filter((video) => {
     if (cat && video.category !== cat && video.mood !== cat) return false;
     if (!q) return true;
     const haystack = [video.title, video.category, video.mood, video.blurb, video.credit].join(" ").toLowerCase();

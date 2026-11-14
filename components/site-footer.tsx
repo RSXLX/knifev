@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/logo";
 import { useLibrary } from "@/lib/library";
+import { track } from "@/lib/track";
 import { categories } from "@/lib/videos";
 
 export function SiteFooter() {
@@ -31,8 +32,9 @@ export function SiteFooter() {
                 setNote(error);
                 return;
               }
-              setNote("已记在这台浏览器，不会发到任何服务器。");
+              setNote("邮箱只留在这台浏览器。后台只记一条「有人点了订阅」，不保存地址。");
               toast("订阅只保存在本地");
+              track("subscribe_local");
               setEmail("");
             }}
           >
@@ -68,6 +70,7 @@ export function SiteFooter() {
             <li><Link className="text-[#d5d5d5] hover:text-white" href="/playlists">片单</Link></li>
             <li><Link className="text-[#d5d5d5] hover:text-white" href="/watch/sintel">从序幕开始看</Link></li>
             <li><Link className="text-[#d5d5d5] hover:text-white" href="/about#sources">片源说明</Link></li>
+            <li><Link className="text-[#d5d5d5] hover:text-white" href="/admin">后台</Link></li>
           </ul>
         </div>
         <div id="contact">

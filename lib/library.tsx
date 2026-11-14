@@ -8,6 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { track } from "@/lib/track";
 
 type LibraryContextValue = {
   ready: boolean;
@@ -87,8 +88,10 @@ export function LibraryProvider({ children }: { children: React.ReactNode }) {
 
   const toggleSave = useCallback((id: string) => {
     setSaved((current) => {
-      const next = current.includes(id) ? current.filter((item) => item !== id) : [id, ...current];
+      const savedNow = !current.includes(id);
+      const next = savedNow ? [id, ...current] : current.filter((item) => item !== id);
       localStorage.setItem(savedKey, JSON.stringify(next));
+      track("save", { videoId: id, saved: savedNow });
       return next;
     });
   }, []);

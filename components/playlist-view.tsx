@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { VideoCard } from "@/components/video-card";
 import { Button } from "@/components/ui/button";
+import { useCatalog } from "@/components/catalog-provider";
 import { useLibrary } from "@/lib/library";
 import { getVideo } from "@/lib/videos";
 
 export function PlaylistView() {
   const { saved, ready, clearSaved, toast } = useLibrary();
-  const items = saved.map((id) => getVideo(id)).filter((video) => Boolean(video));
+  const catalog = useCatalog();
+  const items = saved.map((id) => getVideo(id, catalog.videos)).filter((video) => Boolean(video));
 
   return (
     <div className="mx-auto max-w-[1440px] px-4 pt-28 pb-10">

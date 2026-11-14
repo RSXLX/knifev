@@ -7,7 +7,9 @@ import { ChevronLeft, ChevronRight, Clapperboard, ListVideo, Search, Sparkles } 
 import { VideoCard } from "@/components/video-card";
 import { Button } from "@/components/ui/button";
 import { useLibrary } from "@/lib/library";
-import { featuredId, getVideo, moods, rails, videos, videosByIds } from "@/lib/videos";
+import { useCatalog } from "@/components/catalog-provider";
+import { track } from "@/lib/track";
+import { featuredId, getVideo, moods, rails, videosByIds } from "@/lib/videos";
 
 const steps = [
   {
@@ -57,10 +59,12 @@ const faqs = [
 
 export function HomeView() {
   const { setSearchOpen } = useLibrary();
+  const catalog = useCatalog();
+  const list = catalog.videos;
   const [step, setStep] = useState(0);
   const [openFaq, setOpenFaq] = useState(0);
   const moodRef = useRef<HTMLDivElement>(null);
-  const preview = getVideo(step === 2 ? "flower" : featuredId);
+  const preview = getVideo(step === 2 ? "flower" : featuredId, list);
 
   return (
     <div>
@@ -74,7 +78,7 @@ export function HomeView() {
             从公开短片里挑一条，立刻播放。搜索、分类和片单都留在这台浏览器，不需要账户。
           </p>
           <div className="mt-7 flex flex-col items-center gap-3 sm:flex-row">
-            <Button render={<Link href={`/watch/${featuredId}`} />} className="cta-pill">
+            <Button render={<Link href={`/watch/${featuredId}`} onClick={() => track("cta_watch", { videoId: featuredId })} />} className="cta-pill">
               开始观看
               <span className="spark"><Sparkles className="size-3.5" /></span>
             </Button>
@@ -87,7 +91,7 @@ export function HomeView() {
       </section>
 
       {rails.map((rail) => {
-        const items = videosByIds(rail.ids);
+        const items = videosByIds(rail.ids, list);
         const clipped = items.length > 8;
         return (
           <section key={rail.id} className="mx-auto mt-16 max-w-[1440px] px-4 lg:mt-20">
@@ -96,7 +100,7 @@ export function HomeView() {
             </div>
             <div className="mb-5 flex items-end justify-between gap-4">
               <h2 className="title-gradient text-[30px] sm:text-[48px]">{rail.title}</h2>
-              <Link href={rail.href} className="arrow-link shrink-0">
+              <Link href={rail.href} className="arrow-link shrink-0" onClick={() => track("explore", { rail: rail.id })}>
                 {rail.more} →
               </Link>
             </div>
@@ -108,11 +112,11 @@ export function HomeView() {
               </div>
               {clipped ? (
                 <div className="rail-fade">
-                  <Link href={rail.href} className="explore-btn">{rail.cta}</Link>
+                  <Link href={rail.href} className="explore-btn" onClick={() => track("explore", { rail: rail.id })}>{rail.cta}</Link>
                 </div>
               ) : (
                 <div className="mt-8 flex justify-center">
-                  <Link href={rail.href} className="explore-btn">{rail.cta}</Link>
+                  <Link href={rail.href} className="explore-btn" onClick={() => track("explore", { rail: rail.id })}>{rail.cta}</Link>
                 </div>
               )}
             </div>
@@ -190,7 +194,7 @@ export function HomeView() {
               <p className="mt-3 font-[family-name:var(--font-display)] text-3xl font-light">夜色、航拍、辛特尔</p>
               <div className="mt-5 grid flex-1 grid-cols-3 gap-2">
                 {["harbor", "canyon", "sintel", "bunny", "falls", "candle"].map((id) => {
-                  const item = getVideo(id);
+                  const item = getVideo(id, list);
                   return (
                     <Link key={id} href={`/watch/${id}`} className="relative h-full min-h-24 overflow-hidden rounded-xl bg-[#141414]">
                       <Image src={`/posters/${id}.jpg`} alt="" fill sizes="180px" className="object-cover" />
@@ -210,7 +214,7 @@ export function HomeView() {
               <div>
                 <p className="text-sm text-[#8d8d8d]">片单</p>
                 <ul className="mt-4 space-y-3">
-                  {videos.slice(0, 4).map((video) => (
+                  {list.slice(0, 4).map((video) => (
                     <li key={video.id} className="flex items-center gap-3 border-b border-white/6 pb-3">
                       <Image src={`/posters/${video.id}.jpg`} alt="" width={56} height={56} className="size-14 shrink-0 rounded-lg object-cover" />
                       <span className="min-w-0 flex-1">
@@ -245,7 +249,7 @@ export function HomeView() {
               <div>
                 <p className="text-sm text-[#8d8d8d]">接着看</p>
                 <div className="mt-4 grid grid-cols-2 gap-3">
-                  {videos.slice(2, 6).map((video) => (
+                  {list.slice(2, 6).map((video) => (
                     <Link key={video.id} href={`/watch/${video.id}`} className="overflow-hidden rounded-xl border border-white/8 hover:bg-white/5">
                       <Image src={`/posters/${video.id}.jpg`} alt="" width={480} height={342} className="aspect-[960/684] h-auto w-full object-cover" />
                       <span className="block px-3 py-2">
@@ -267,7 +271,7 @@ export function HomeView() {
         <div className="mt-8 grid gap-4 lg:grid-cols-2">
           <article className="panel p-6">
             <p className="text-sm text-[#8d8d8d]">片库规模</p>
-            <p className="mt-6 font-[family-name:var(--font-display)] text-6xl font-light text-[#d7f5df]">{videos.length}</p>
+            <p className="mt-6 font-[family-name:var(--font-display)] text-6xl font-light text-[#d7f5df]">{list.length}</p>
             <p className="mt-2 text-sm text-[#9a9a9a]">条可播放的公开短片</p>
             <h3 className="mt-8 text-xl">都在这个前端里</h3>
             <p className="mt-2 text-[15px] leading-7 text-[#b5b5b5]">没有付费接口，也没有假装接上的账户。点进去就是 HTML 视频。</p>
@@ -329,7 +333,7 @@ export function HomeView() {
           </Button>
         </div>
         <div className="panel overflow-hidden">
-          <video className="aspect-video w-full object-cover" src={videos[4].src} poster="/posters/canyon.jpg" muted loop playsInline autoPlay preload="metadata" />
+          <video className="aspect-video w-full object-cover" src={getVideo("canyon", list)?.src} poster="/posters/canyon.jpg" muted loop playsInline autoPlay preload="metadata" />
         </div>
       </section>
 

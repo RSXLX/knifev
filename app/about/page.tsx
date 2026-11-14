@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { videos } from "@/lib/videos";
+import { publicVideos } from "@/lib/store";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "关于 — Lumora",
@@ -7,7 +9,7 @@ export const metadata = {
 };
 
 export default function AboutPage() {
-  const sources = Array.from(new Map(videos.map((video) => [video.source, video])).values());
+  const sources = Array.from(new Map(publicVideos().map((video) => [video.source, video])).values());
   return (
     <div className="mx-auto max-w-[860px] px-4 pt-28 pb-16">
       <span className="eyebrow">独立演示</span>

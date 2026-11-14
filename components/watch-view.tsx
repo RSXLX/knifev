@@ -5,15 +5,17 @@ import { Check, Plus } from "lucide-react";
 import { Player } from "@/components/player";
 import { VideoCard } from "@/components/video-card";
 import { Button } from "@/components/ui/button";
+import { useCatalog } from "@/components/catalog-provider";
 import { useLibrary } from "@/lib/library";
 import { getVideo, relatedVideos } from "@/lib/videos";
 
 export function WatchView({ id }: { id: string }) {
-  const video = getVideo(id);
+  const catalog = useCatalog();
+  const video = getVideo(id, catalog.videos);
   const { isSaved, toggleSave, toast } = useLibrary();
-  if (!video) return null;
+  if (!video) return catalog.ready ? null : <p className="px-4 pt-28 text-[#9a9a9a]">正在读取片库…</p>;
   const saved = isSaved(video.id);
-  const related = relatedVideos(video.id, 4);
+  const related = relatedVideos(video.id, 4, catalog.videos);
 
   return (
     <div className="mx-auto max-w-[1200px] px-4 pt-28 pb-8">

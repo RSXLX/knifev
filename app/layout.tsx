@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Onest, Outfit } from "next/font/google";
+import { CatalogProvider } from "@/components/catalog-provider";
 import { Shell } from "@/components/shell";
 import { LibraryProvider } from "@/lib/library";
 import "./globals.css";
@@ -26,7 +27,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="zh-CN" className={`dark ${onest.variable} ${outfit.variable}`}>
       <body className="min-h-screen bg-[#060606] text-[#f5f5f5] antialiased">
         <LibraryProvider>
-          <Shell>{children}</Shell>
+          <CatalogProvider>
+            <Shell>{children}</Shell>
+          </CatalogProvider>
         </LibraryProvider>
       </body>
     </html>

@@ -4,21 +4,28 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
+import { useCatalog } from "@/components/catalog-provider";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useLibrary } from "@/lib/library";
+import { track } from "@/lib/track";
 import { filterVideos, moods } from "@/lib/videos";
 
 export function SearchDialog() {
   const router = useRouter();
+  const catalog = useCatalog();
   const { searchOpen, setSearchOpen } = useLibrary();
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
-  const results = useMemo(() => filterVideos({ q: query }).slice(0, 8), [query]);
+  const results = useMemo(() => filterVideos({ q: query }, catalog.videos).slice(0, 8), [query, catalog.videos]);
 
   useEffect(() => {
     setActive(0);
   }, [query, searchOpen]);
+
+  useEffect(() => {
+    if (searchOpen) track("search_open");
+  }, [searchOpen]);
 
   const openResult = (id: string) => {
     setSearchOpen(false);
@@ -38,6 +45,7 @@ export function SearchDialog() {
           className="flex items-center gap-3 border-b border-white/8 px-4"
           onSubmit={(event) => {
             event.preventDefault();
+            track("search", { q: query.trim(), results: results.length });
             if (results[active]) openResult(results[active].id);
             else {
               setSearchOpen(false);
@@ -94,7 +102,10 @@ export function SearchDialog() {
                   type="button"
                   className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left ${index === active ? "bg-white/8" : "hover:bg-white/5"}`}
                   onMouseEnter={() => setActive(index)}
-                  onClick={() => openResult(video.id)}
+                  onClick={() => {
+                    track("search", { q: query.trim(), results: results.length, videoId: video.id });
+                    openResult(video.id);
+                  }}
                 >
                   <Image src={`/posters/${video.id}.jpg`} alt="" width={48} height={48} className="size-12 shrink-0 rounded-lg object-cover" />
                   <span className="min-w-0">

@@ -14,7 +14,7 @@ export function GuestDialog() {
           {guest ? "你正在以访客观看" : "这里没有登录"}
         </DialogTitle>
         <DialogDescription className="text-[15px] leading-7 text-[#b5b5b5]">
-          Lumora 是一个前端演示。片单和订阅只写在这台浏览器的本地存储里，不会提交到服务器，也没有账户可登。
+          knifeV 是一个前端演示。片单和订阅只写在这台浏览器的本地存储里，不会提交到服务器，也没有账户可登。
         </DialogDescription>
         <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:justify-end">
           <Button type="button" variant="outline" className="h-10 rounded-full border-white/12 bg-transparent text-[#f5f5f5]" onClick={() => setGuestOpen(false)}>

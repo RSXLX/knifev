@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   const video = publicVideos().find((item) => item.id === id);
   return {
-    title: video ? `${video.title} — Lumora` : "找不到这条片子",
+    title: video ? `${video.title} — knifeV` : "找不到这条片子",
     description: video?.blurb,
   };
 }

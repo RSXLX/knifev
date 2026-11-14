@@ -1,7 +1,7 @@
 import { AdminFrame } from "@/components/admin/admin-frame";
 
 export const metadata = {
-  title: "后台 — Lumora",
+  title: "后台 — knifeV",
   description: "本地片子管理和埋点记录。",
 };
 

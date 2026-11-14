@@ -81,7 +81,7 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="mx-auto mt-12 flex max-w-[1440px] flex-col gap-2 border-t border-white/6 pt-5 text-sm text-[#7a7a7a] sm:flex-row sm:justify-between">
-        <p>© {new Date().getFullYear()} Lumora 演示</p>
+        <p>© {new Date().getFullYear()} knifeV 演示</p>
         <p>公开示例片 · 本地片单 · 无账户</p>
       </div>
     </footer>

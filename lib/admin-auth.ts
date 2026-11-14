@@ -1,7 +1,7 @@
 export const ADMIN_COOKIE = "lumora_admin";
 
 export function adminPassword() {
-  return process.env.ADMIN_PASSWORD || "lumora-demo";
+  return process.env.ADMIN_PASSWORD || "knifev-demo";
 }
 
 export async function adminToken(password = adminPassword()) {

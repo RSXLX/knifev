@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { LibraryView } from "@/components/library-view";
 
 export const metadata = {
-  title: "片库 — Lumora",
+  title: "片库 — knifeV",
   description: "按分类和关键词筛选可播放的公开短片。",
 };
 

@@ -18,7 +18,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Lumora — 电影感影像，随手开播",
+  title: "knifeV — 电影感影像，随手开播",
   description: "一个独立的视频浏览演示。公开短片可以搜索、筛选、加入本地片单并直接播放。",
 };
 

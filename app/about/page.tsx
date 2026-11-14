@@ -4,7 +4,7 @@ import { publicVideos } from "@/lib/store";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "关于 — Lumora",
+  title: "关于 — knifeV",
   description: "这个演示站是什么，片子从哪来。",
 };
 
@@ -13,10 +13,10 @@ export default function AboutPage() {
   return (
     <div className="mx-auto max-w-[860px] px-4 pt-28 pb-16">
       <span className="eyebrow">独立演示</span>
-      <h1 className="title-gradient mt-4 text-[36px] sm:text-[52px]">关于 Lumora</h1>
+      <h1 className="title-gradient mt-4 text-[36px] sm:text-[52px]">关于 knifeV</h1>
       <div className="mt-6 space-y-4 text-[16px] leading-8 text-[#d0d0d0]">
         <p>
-          Lumora 是一个可以实际播放的视频浏览页。布局、深色底、玻璃导航和渐变标题参考了电影感模板库的视觉节奏，内容全部换成短片。
+          knifeV 是一个可以实际播放的视频浏览页。布局、深色底、玻璃导航和渐变标题参考了电影感模板库的视觉节奏，内容全部换成短片。
         </p>
         <p>它不是那个站点的官方产品，也没有接入它的账户、定价或素材接口。这里的按钮会搜索、筛选、播放、把片子记在本地，不会假装已经登录。</p>
       </div>
